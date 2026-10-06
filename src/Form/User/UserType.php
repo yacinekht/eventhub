@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace App\form\User;
+namespace App\Form\User;
 
 use App\Entity\User;
 use Symfony\Component\Form\AbstractType;
@@ -36,15 +36,15 @@ class UserType extends AbstractType
             ->add('password', RepeatedType::class, [
                 'type' => PasswordType::class,
                 'label' => 'Mot de passe',
-                'mapped' => false,
+                'mapped' => true,
                 'first_options' => ['label' => 'Password', 'attr' => [
-                    'class'=> 'form-control'
+                    'class'=> 'Form-control'
                 ]],
                 'second_options' => ['label' => 'Repeat Password', 'attr' => [
-                    'class'=> 'form-control'
+                    'class'=> 'Form-control'
                 ]],
                 'attr' => [
-                    'class'=> 'form-control'
+                    'class'=> 'Form-control'
                 ],
                 'constraints' => [
                 ]
