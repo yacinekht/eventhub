@@ -8,6 +8,9 @@ use App\Repository\UserRepository;
 use Doctrine\ORM\Mapping\Column;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping\Entity;
+use Doctrine\ORM\Mapping as ORM;
+use Doctrine\Common\Collections\Collection;
+use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping\GeneratedValue;
 use Doctrine\ORM\Mapping\Id;
 use Doctrine\ORM\Mapping\Table;
@@ -21,6 +24,10 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[Id, Column(type: 'integer'), GeneratedValue]
     private ?int $id = null;
 
+    #[ORM\OneToMany(mappedBy: 'organizer', targetEntity: Event::class)]
+    private Collection $events;
+    #[ORM\OneToMany(mappedBy: 'user', targetEntity: Registration::class)]
+    private Collection $registrations;
     #[Column(type: 'string', length: 100, nullable: false)]
     #[Assert\NotBlank, Assert\Type('string')]
     private string $username;
@@ -44,6 +51,8 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     public function __construct()
     {
         $this->createdAt = new \DateTimeImmutable();
+        $this->events = new ArrayCollection();
+        $this->registrations = new ArrayCollection();
     }
 
     /**
@@ -123,5 +132,19 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     public function getUserIdentifier(): string
     {
         return $this->getUsername();
+    }
+
+    public function getEvents(): Collection
+    {
+        return $this->events;
+    }
+    public function getRegistrations(): Collection
+    {
+        return $this->registrations;
+    }
+
+    public function setRoles(array $roles): void
+    {
+        $this->roles = $roles;
     }
 }
