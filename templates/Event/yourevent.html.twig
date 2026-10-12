@@ -1,35 +1,52 @@
 {% extends 'base.html.twig' %}
 
-{% block title %} {{ parent() }} | EVENTpage {% endblock %}
+{% block title %}{{ parent() }} | Mes Événements{% endblock %}
 
 {% block body %}
-
-    <div class="p-5 mb-4 bg-white rounded-3 shadow-sm">
-        <h2>Prochains événements</h2>
+    <div class="d-flex align-items-center justify-content-between mb-4">
+        <div>
+            <h1 class="fw-bold m-0"><i class="fa-solid fa-layer-group text-primary me-2"></i>Mes Événements</h1>
+            <p class="text-muted small mt-1">Gérez les événements que vous avez créés.</p>
+        </div>
+        <a href="/NewEvent" class="btn-eh">
+            <i class="fa-solid fa-plus me-1"></i> Créer un événement
+        </a>
     </div>
-    <div class="row">
+
+    <div class="row g-4">
         {% for events in event %}
-            <div class="col-md-4 mb-3">
-                <div class="card h-100">
-                    <div class="card-body"><h3 class="h5">{{ events.title }}</h3>
-                        <p>{{ events.startAt|date('d/m/Y H:i') }}</p>
-                        <a href={{ path('detailsEvent', {'slug': events.slug}) }}>Détails →</a>
+            <div class="col-md-6 col-lg-4">
+                <div class="card-event">
+                    <div>
+                        <div class="d-flex align-items-start justify-content-between mb-3">
+                            <div class="date-badge">
+                                <span class="day">{{ events.startAt|date('d') }}</span>
+                                <span class="month">{{ events.startAt|date('M') }}</span>
+                            </div>
+                            <span class="badge rounded-pill text-bg-light border px-3 py-2 fw-normal text-muted">
+                            <i class="fa-regular fa-clock me-1"></i> {{ events.startAt|date('H:i') }}
+                        </span>
+                        </div>
 
-                        {% if is_granted('ROLE_ADMIN') or app.user == events.organizer  %}
-                            <a href={{ path('editevent', {'slug': events.slug}) }}>Modifier l'évenement →</a>
-                        {% endif %}
-
+                        <h3 class="h5 fw-bold text-dark mb-2">{{ events.title }}</h3>
                     </div>
 
+                    <div class="pt-3 border-top mt-3 d-flex align-items-center justify-content-between gap-2">
+                        <a href="{{ path('detailsEvent', {'slug': events.slug}) }}" class="btn-eh-outline w-50 justify-content-center">Détails</a>
 
+                        {% if is_granted('ROLE_ADMIN') or app.user == events.organizer %}
+                            <a href="{{ path('editevent', {'slug': events.slug}) }}" class="btn-eh w-50 justify-content-center">Modifier</a>
+                        {% endif %}
+                    </div>
                 </div>
             </div>
         {% else %}
-            <p>Aucun événement publié.</p>
+            <div class="col-12 text-center py-5 bg-white rounded-4 border shadow-sm">
+                <i class="fa-regular fa-folder-open display-4 text-muted mb-3 d-block"></i>
+                <h4 class="fw-bold">Aucun événement créé</h4>
+                <p class="text-muted mb-4">Vous n'avez pas encore publié d'événement.</p>
+                <a href="/NewEvent" class="btn-eh">Créer mon premier événement</a>
+            </div>
         {% endfor %}
-        <div class="p-5 mb-4 bg-white rounded-3 shadow-sm">
-            <a class="btn btn-primary" href='/'>Voir les événements en ligne </a>
-        </div>
     </div>
-
 {% endblock %}

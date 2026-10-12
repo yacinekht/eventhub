@@ -1,28 +1,39 @@
 {% extends 'base.html.twig' %}
 
+{% block title %}Connexion | EventHub Enigma{% endblock %}
+
 {% block body %}
-    <div class="container mt-5">
-        <h1>Connexion</h1>
+    <div class="row justify-content-center py-4">
+        <div class="col-md-5">
+            <div class="form-card">
+                <div class="text-center mb-4">
+                    <span class="brand-mark mx-auto mb-3"><i class="fa-solid fa-lock"></i></span>
+                    <h2 class="fw-bold">Bon retour !</h2>
+                    <p class="text-muted small">Connectez-vous pour accéder à vos événements</p>
+                </div>
 
-        {% if error %}
-            <div class="alert alert-danger">{{ error.messageKey|trans(error.messageData, 'security') }}</div>
-        {% endif %}
+                {% if error %}
+                    <div class="alert alert-danger rounded-3 mb-3 small">
+                        <i class="fa-solid fa-triangle-exclamation me-1"></i> {{ error.messageKey|trans(error.messageData, 'security') }}
+                    </div>
+                {% endif %}
 
-        <form action="{{ path('app_login') }}" method="post">
-            <div class="mb-3">
-                <label for="username" class="form-label">Email </label>
-                <input type="text" value="{{ last_username }}" name="email" id="email" class="form-control" autocomplete="email" required autofocus>
+                <form action="{{ path('app_login') }}" method="post">
+                    <div class="mb-3">
+                        <label for="email" class="form-label fw-semibold small">Adresse Email</label>
+                        <input type="email" value="{{ last_username }}" name="email" id="email" class="form-control" autocomplete="email" required autofocus placeholder="votre@email.com">
+                    </div>
+
+                    <div class="mb-4">
+                        <label for="password" class="form-label fw-semibold small">Mot de passe</label>
+                        <input type="password" name="password" id="password" class="form-control" autocomplete="current-password" required placeholder="••••••••">
+                    </div>
+
+                    <input type="hidden" name="_csrf_token" value="{{ csrf_token('authenticate') }}">
+
+                    <button type="submit" class="btn-eh w-100 mb-3 py-2">Se connecter</button>
+                </form>
             </div>
-
-            <div class="mb-3">
-                <label for="password" class="form-label">Mot de passe</label>
-                <input type="password" name="password" id="password" class="form-control" autocomplete="current-password" required>
-            </div>
-
-            {# Jeton CSRF pour la sécurité #}
-            <input type="hidden" name="_csrf_token" value="{{ csrf_token('authenticate') }}">
-
-            <button type="submit" class="btn btn-primary">Se connecter</button>
-        </form>
+        </div>
     </div>
 {% endblock %}

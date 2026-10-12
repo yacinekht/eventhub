@@ -3,166 +3,258 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>{% block title %}EventHub Enigma {% endblock %}</title>
+    <title>{% block title %}EventHub Enigma{% endblock %}</title>
 
     <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 64 64%22><rect width=%2264%22 height=%2264%22 rx=%2216%22 fill=%22%236A4DFF%22/><circle cx=%2232%22 cy=%2232%22 r=%2214%22 fill=%22none%22 stroke=%22%23fff%22 stroke-width=%228%22/></svg>">
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/css/bootstrap.min.css" integrity="sha384-xOolHFLEh07PJGoPkLv1IbcEPTNtaed2xpHsD9ESMhqIYd0nLMwNLD69Npy4HI+N" crossorigin="anonymous">
+
+    <!-- Bootstrap 5.3 & FontAwesome 6 -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
+
+    <!-- Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500;12..96,700;12..96,800&family=Figtree:wght@400;500;600&display=swap">
+    <link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,600;700;800&family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
 
     <style>
-
-        .form-card label { font-weight: 600; }
-        .form-card .form-control, .form-card .custom-select { border-radius: 14px; border-color: var(--line); background: #FBFAFF; min-height: 3rem; }
-        .form-card .form-control:focus, .form-card .custom-select:focus { border-color: var(--accent); box-shadow: 0 0 0 4px rgba(106,77,255,.15); }
         :root {
-            --ink: #14123A;
-            --ink-soft: #5A5782;
-            --bg: #F4F2FF;
+            --ink: #0F172A;
+            --ink-soft: #64748B;
+            --bg: #F8FAFC;
             --card: #FFFFFF;
-            --accent: #6A4DFF;
-            --accent-dark: #5336E8;
-            --pink: #FF6FB5;
-            --brass: #FFC857;
-            --line: #E4DFFA;
-            --radius: 22px;
-            --grad: linear-gradient(135deg, #6A4DFF 0%, #A24DFF 55%, #FF6FB5 100%);
-            --shadow: 0 18px 40px -22px rgba(60, 35, 180, .45);
+            --accent: #6366F1;
+            --accent-hover: #4F46E5;
+            --accent-light: #EEF2FF;
+            --line: #E2E8F0;
+            --radius-lg: 24px;
+            --radius-md: 16px;
+            --grad: linear-gradient(135deg, #6366F1 0%, #8B5CF6 50%, #EC4899 100%);
+            --shadow-sm: 0 4px 6px -1px rgba(0, 0, 0, 0.05);
+            --shadow-lg: 0 20px 25px -5px rgba(99, 102, 241, 0.12), 0 8px 10px -6px rgba(0, 0, 0, 0.04);
         }
-        html { scroll-behavior: smooth; }
+
         body {
-            background:
-                radial-gradient(900px 500px at 8% -5%, rgba(106,77,255,.16), transparent 60%),
-                radial-gradient(800px 500px at 100% 10%, rgba(255,111,181,.14), transparent 60%),
-                var(--bg);
+            background-color: var(--bg);
+            background-image:
+                radial-gradient(at 0% 0%, rgba(99, 102, 241, 0.08) 0px, transparent 50%),
+                radial-gradient(at 100% 100%, rgba(236, 72, 153, 0.06) 0px, transparent 50%);
             background-attachment: fixed;
             color: var(--ink);
-            font-family: 'Figtree', system-ui, sans-serif;
-            font-size: 1.05rem;
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            font-size: 1.025rem;
             line-height: 1.6;
         }
-        h1, h2, h3, h4, .brand { font-family: 'Bricolage Grotesque', 'Figtree', sans-serif; letter-spacing: -0.02em; }
-        a { color: var(--accent); }
-        a:hover { color: var(--accent-dark); }
-        :focus-visible { outline: 3px solid var(--brass); outline-offset: 3px; border-radius: 8px; }
 
-        /* Navigation */
-        .eh-nav { padding: 1rem 0; position: sticky; top: 0; z-index: 10;
-            background: rgba(244,242,255,.75); backdrop-filter: blur(14px); -webkit-backdrop-filter: blur(14px);
-            border-bottom: 1px solid rgba(106,77,255,.08); margin-bottom: 1.5rem; }
-        .eh-nav .brand { display: inline-flex; align-items: center; gap: .65rem; font-weight: 800; font-size: 1.25rem; color: var(--ink); text-decoration: none; }
-        .eh-nav .brand:hover { color: var(--ink); text-decoration: none; }
-        .brand-mark { width: 36px; height: 36px; border-radius: 12px; background: var(--grad); display: inline-grid; place-items: center; box-shadow: 0 8px 18px -8px rgba(106,77,255,.8); }
-        .brand-mark::after { content: ""; width: 14px; height: 14px; border-radius: 50%; border: 4px solid #fff; }
-        .eh-nav .nav-link-eh { color: var(--ink); font-weight: 600; text-decoration: none; padding: .5rem 1.1rem; border-radius: 999px; background: #fff; border: 1px solid var(--line); transition: all .15s ease; }
-        .eh-nav .nav-link-eh:hover { border-color: var(--accent); color: var(--accent); }
-        .eh-main { padding-bottom: 5rem; }
+        h1, h2, h3, h4, .brand {
+            font-family: 'Bricolage Grotesque', sans-serif;
+            letter-spacing: -0.025em;
+        }
 
-        /* Hero */
-        .hero {
+        /* Navbar */
+        .eh-nav {
+            background: rgba(255, 255, 255, 0.8);
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
+            border-bottom: 1px solid var(--line);
+            padding: 0.85rem 0;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        .brand {
+            font-weight: 800;
+            font-size: 1.35rem;
+            color: var(--ink);
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.75rem;
+        }
+
+        .brand-mark {
+            width: 40px;
+            height: 40px;
+            border-radius: 12px;
             background: var(--grad);
+            display: grid;
+            place-items: center;
             color: #fff;
-            border-radius: 32px;
-            padding: clamp(2.2rem, 7vw, 5rem);
-            position: relative; overflow: hidden;
-            box-shadow: 0 30px 60px -30px rgba(106,77,255,.8);
+            box-shadow: 0 8px 16px -4px rgba(99, 102, 241, 0.4);
         }
-        .hero::before {
-            content: ""; position: absolute; inset: 0;
-            background-image: radial-gradient(rgba(255,255,255,.22) 1.5px, transparent 1.5px);
-            background-size: 24px 24px;
-            -webkit-mask-image: linear-gradient(120deg, transparent 30%, #000 100%);
-            mask-image: linear-gradient(120deg, transparent 30%, #000 100%);
+
+        .nav-link-eh {
+            color: var(--ink-soft);
+            font-weight: 600;
+            text-decoration: none;
+            padding: 0.55rem 1.1rem;
+            border-radius: 99px;
+            transition: all 0.2s ease;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            font-size: 0.95rem;
         }
-        .hero::after {
-            content: ""; position: absolute; right: -80px; bottom: -120px;
-            width: 360px; height: 360px; border-radius: 50%;
-            background: radial-gradient(circle at 30% 30%, #FFE29A, var(--brass) 60%, #FF9E57);
-            opacity: .95;
+
+        .nav-link-eh:hover {
+            color: var(--accent);
+            background: var(--accent-light);
         }
-        .hero h1 { font-weight: 800; font-size: clamp(2.4rem, 6vw, 4.6rem); line-height: 1; max-width: 12ch; position: relative; z-index: 1; text-shadow: 0 4px 24px rgba(20,18,58,.25); }
-        .hero p { color: rgba(255,255,255,.88); max-width: 38ch; font-size: 1.2rem; margin: 1.2rem 0 1.8rem; position: relative; z-index: 1; }
+
+        /* Classes personnalisées propres (évite les erreurs de style en ligne) */
+        .hero-banner {
+            background: var(--grad);
+            color: white;
+            box-shadow: var(--shadow-lg);
+        }
+
+        /* Cartes d'événements */
+        .card-event {
+            background: var(--card);
+            border: 1px solid var(--line);
+            border-radius: var(--radius-lg);
+            padding: 1.5rem;
+            transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            box-shadow: var(--shadow-sm);
+        }
+
+        .card-event:hover {
+            transform: translateY(-6px);
+            box-shadow: var(--shadow-lg);
+            border-color: rgba(99, 102, 241, 0.3);
+        }
+
+        .date-badge {
+            background: var(--accent-light);
+            color: var(--accent);
+            border-radius: 14px;
+            padding: 0.6rem 0.85rem;
+            text-align: center;
+            font-weight: 700;
+            line-height: 1.1;
+            display: inline-block;
+        }
+
+        .date-badge .day {
+            font-size: 1.4rem;
+            font-family: 'Bricolage Grotesque', sans-serif;
+            display: block;
+        }
+
+        .date-badge .month {
+            font-size: 0.75rem;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+        }
 
         /* Boutons */
-        .btn-eh { display: inline-block; background: #fff; color: var(--ink); font-weight: 700; border: 0; border-radius: 999px; padding: .85rem 1.8rem; box-shadow: 0 12px 24px -12px rgba(20,18,58,.5); transition: transform .15s ease, box-shadow .15s ease; position: relative; z-index: 1; }
-        .btn-eh:hover { color: var(--ink); text-decoration: none; transform: translateY(-2px); box-shadow: 0 16px 28px -12px rgba(20,18,58,.55); }
-        .btn-eh.dark { background: var(--grad); color: #fff; box-shadow: 0 14px 26px -12px rgba(106,77,255,.9); }
-        .btn-eh.dark:hover { color: #fff; box-shadow: 0 18px 30px -12px rgba(106,77,255,1); }
+        .btn-eh {
+            background: var(--accent);
+            color: #fff;
+            font-weight: 600;
+            border-radius: 99px;
+            padding: 0.7rem 1.5rem;
+            border: none;
+            transition: all 0.2s ease;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.5rem;
+            text-decoration: none;
+        }
 
-        /* Titres */
-        .section-title { font-weight: 800; font-size: clamp(1.7rem, 3.5vw, 2.4rem); margin: 3.5rem 0 1.5rem; }
-        .page-head { margin: 1.5rem 0 .5rem; }
-        .page-head h1 { font-weight: 800; font-size: clamp(2rem, 5vw, 3.4rem); line-height: 1.05; }
+        .btn-eh:hover {
+            background: var(--accent-hover);
+            color: #fff;
+            transform: translateY(-1px);
+            box-shadow: 0 10px 20px -8px rgba(99, 102, 241, 0.6);
+        }
 
-        /* Cartes d'événement */
-        .event-card { background: var(--card); border-radius: var(--radius); border: 1px solid var(--line); padding: 1.3rem; height: 100%; display: flex; gap: 1.1rem; align-items: flex-start; box-shadow: var(--shadow); transition: transform .2s ease, border-color .2s ease; }
-        .event-card:hover { transform: translateY(-4px); border-color: var(--accent); }
-        .date-tile { flex: 0 0 auto; width: 70px; border-radius: 18px; background: var(--grad); color: #fff; text-align: center; padding: .6rem 0 .65rem; line-height: 1; box-shadow: 0 10px 20px -10px rgba(106,77,255,.9); }
-        .date-tile .day { display: block; font-family: 'Bricolage Grotesque', sans-serif; font-weight: 800; font-size: 1.95rem; }
-        .date-tile .month { display: block; font-size: .85rem; margin-top: .3rem; font-weight: 600; opacity: .92; }
-        .event-card h3 { font-weight: 700; font-size: 1.2rem; margin: 0 0 .25rem; }
-        .event-card .time { color: var(--ink-soft); margin: 0 0 .7rem; font-size: .95rem; }
-        .event-card .more { font-weight: 700; text-decoration: none; display: inline-block; padding: .2rem .8rem; border-radius: 999px; background: rgba(106,77,255,.1); }
-        .event-card .more:hover { background: var(--accent); color: #fff; }
-        .empty { background: rgba(255,255,255,.7); border: 2px dashed var(--line); border-radius: var(--radius); padding: 2.5rem; text-align: center; color: var(--ink-soft); }
+        .btn-eh-outline {
+            background: transparent;
+            color: var(--ink);
+            border: 1px solid var(--line);
+            font-weight: 600;
+            border-radius: 99px;
+            padding: 0.65rem 1.3rem;
+            transition: all 0.2s ease;
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            justify-content: center;
+        }
 
-        /* Détail */
-        .detail-card { background: var(--card); border-radius: 30px; border: 1px solid var(--line); padding: clamp(1.5rem, 4vw, 3.2rem); box-shadow: var(--shadow); }
-        .facts { display: grid; grid-template-columns: repeat(auto-fit, minmax(190px, 1fr)); gap: 1rem; margin: 2rem 0; }
-        .fact { background: linear-gradient(145deg, #F4F1FF, #FFF1F8); border: 1px solid var(--line); border-radius: 18px; padding: 1rem 1.2rem; }
-        .fact dt { font-size: .9rem; font-weight: 500; color: var(--ink-soft); }
-        .fact dd { margin: .2rem 0 0; font-family: 'Bricolage Grotesque', sans-serif; font-weight: 700; font-size: 1.25rem; }
-        .status { display: inline-block; padding: .3rem 1rem; border-radius: 999px; background: var(--brass); color: var(--ink); font-weight: 700; font-size: .95rem; }
-        .description { max-width: 65ch; }
+        .btn-eh-outline:hover {
+            border-color: var(--accent);
+            color: var(--accent);
+            background: var(--accent-light);
+        }
 
-        /* Formulaire */
-        .login-card { max-width: 440px; margin: 3rem auto; background: var(--card); border: 1px solid var(--line); border-radius: 30px; padding: 2.4rem; box-shadow: var(--shadow); }
-        .login-card h1 { font-weight: 800; font-size: 2rem; margin-bottom: 1.5rem; }
-        .login-card label { font-weight: 600; }
-        .login-card .form-control { border-radius: 14px; border-color: var(--line); padding: 1.5rem 1rem; background: #FBFAFF; }
-        .login-card .form-control:focus { border-color: var(--accent); box-shadow: 0 0 0 4px rgba(106,77,255,.15); }
-        .login-card .btn-eh { width: 100%; margin-top: .5rem; }
-
-        @media (prefers-reduced-motion: reduce) { * { transition: none !important; scroll-behavior: auto !important; } }
+        .flash-container {
+            position: fixed;
+            top: 90px;
+            right: 24px;
+            z-index: 1050;
+            max-width: 400px;
+        }
     </style>
 
-    {% block stylesheets %}
-    {% endblock %}
-
+    {% block stylesheets %}{% endblock %}
     {% block javascripts %}
         {% block importmap %}{{ importmap('app') }}{% endblock %}
     {% endblock %}
-
-    {% set frankenphp_hot_reload = app.request.server.get('FRANKENPHP_HOT_RELOAD') %}
-    {% if frankenphp_hot_reload %}
-        <meta name="frankenphp-hot-reload:url" content="{{ frankenphp_hot_reload }}">
-        <script src="https://cdn.jsdelivr.net/npm/idiomorph"></script>
-        <script src="https://cdn.jsdelivr.net/npm/frankenphp-hot-reload/+esm" type="module"></script>
-    {% endif %}
 </head>
 <body>
+
+<!-- Messages Flash -->
+<div class="flash-container">
+    {% for type, messages in app.flashes %}
+        {% for message in messages %}
+            <div class="alert alert-{{ type == 'error' ? 'danger' : type }} alert-dismissible fade show shadow-lg rounded-4 border-0 mb-2" role="alert">
+                <i class="fa-solid fa-circle-check me-2"></i> {{ message }}
+                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+            </div>
+        {% endfor %}
+    {% endfor %}
+</div>
+
+<!-- Header / Navigation -->
 <header class="eh-nav">
     <div class="container d-flex align-items-center justify-content-between">
-        <a class="brand" href="/"><span class="brand-mark" aria-hidden="true"></span>EventHub Enigma</a>
-        <nav>
-            <a class="nav-link-eh" href="/eventAll">Événements</a>
-            {% if is_granted('ROLE_ADMIN') or is_granted('ROLE_ORGANIZER')  %}
-                <a class="nav-link-eh" href={{ path('yourevent') }}>Mes Événements</a>
+        <a class="brand" href="/">
+            <span class="brand-mark"><i class="fa-solid fa-bolt"></i></span>
+            EventHub <span style="color: var(--accent);">Enigma</span>
+        </a>
+        <nav class="d-none d-md-flex gap-2">
+            <a class="nav-link-eh" href="/eventAll"><i class="fa-regular fa-calendar-days"></i> Événements</a>
+            {% if is_granted('ROLE_ADMIN') or is_granted('ROLE_ORGANIZER') %}
+                <a class="nav-link-eh" href="{{ path('yourevent') }}"><i class="fa-solid fa-layer-group"></i> Mes Événements</a>
             {% endif %}
-            {% if app.user %}
-                <a class="nav-link-eh" href="{{ path('logout') }}">Déconnexion</a>
-            {% else %}
-                <a class="nav-link-eh" href="{{ path('app_login') }}">Connexion</a>
-            {% endif %}
-            <a class="nav-link-eh" href="/inscriptions">Mes Inscription(s)</a>
-
+            <a class="nav-link-eh" href="/inscriptions"><i class="fa-solid fa-ticket"></i> Mes Inscriptions</a>
         </nav>
+        <div class="d-flex align-items-center gap-2">
+            {% if app.user %}
+                <span class="badge rounded-pill text-bg-light border me-2 py-2 px-3 fw-medium">
+                    <i class="fa-solid fa-user me-1 text-primary"></i> {{ app.user.username ?? app.user.userIdentifier }}
+                </span>
+                <a class="btn-eh-outline py-2 px-3" href="{{ path('logout') }}"><i class="fa-solid fa-arrow-right-from-bracket"></i></a>
+            {% else %}
+                <a class="btn-eh-outline py-2 px-3" href="{{ path('app_login') }}">Connexion</a>
+                <a class="btn-eh py-2 px-3" href="{{ path('app_register') }}">S'inscrire</a>
+            {% endif %}
+        </div>
     </div>
 </header>
 
-<main class="container eh-main">
+<main class="container py-5">
     {% block body %}{% endblock %}
 </main>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>

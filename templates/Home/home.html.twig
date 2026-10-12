@@ -1,42 +1,68 @@
 {% extends 'base.html.twig' %}
 
-{% block title %} {{ parent() }} | Homepage {% endblock %}
+{% block title %}{{ parent() }} | Homepage{% endblock %}
 
 {% block body %}
-    <div class="p-5 mb-4 bg-white rounded-3 shadow-sm"><h1>Organisez. Participez. Partagez.</h1>
-        <p class="lead">Une plateforme de gestion d'événements avec inscription et liste d'attente.</p><a
-            class="btn btn-primary" href='/eventAll'>Voir les événements</a>
+    <!-- Hero Section avec la classe propre (sans style en ligne) -->
+    <div class="p-5 mb-5 rounded-4 position-relative overflow-hidden hero-banner">
+        <div class="row align-items-center position-relative" style="z-index: 2;">
+            <div class="col-lg-8">
+                <span class="badge bg-white text-dark mb-3 px-3 py-2 rounded-pill"><i class="fa-solid fa-star text-warning me-1"></i> Plateforme exclusive d'événements</span>
+                <h1 class="display-4 fw-extrabold mb-3">Organisez. Participez. Partagez.</h1>
+                <p class="lead mb-4 opacity-90">Une plateforme moderne de gestion d'événements avec inscription rapide et gestion de listes d'attente.</p>
+                <a class="btn btn-light rounded-pill btn-lg fw-bold px-4 shadow-sm text-dark text-decoration-none" href="/eventAll">
+                    Voir les événements <i class="fa-solid fa-arrow-right ms-2 text-primary"></i>
+                </a>
+            </div>
+        </div>
     </div>
-    <div class="p-5 mb-4 bg-white rounded-3 shadow-sm">
-        <h2>Prochains événements</h2>
+
+    <div class="d-flex align-items-center justify-content-between mb-4">
+        <h2 class="fw-bold m-0"><i class="fa-solid fa-fire text-danger me-2"></i>Prochains événements</h2>
     </div>
-    <div class="row">
+
+    <div class="row g-4">
         {% for event in events %}
-            <div class="col-md-4 mb-3">
-                <div class="card h-100">
-                    <div class="card-body"><h3 class="h5">{{ event.title }}</h3>
-                        <p>{{ event.startAt|date('d/m/Y H:i') }}</p>
-                        <a href={{ path('detailsEvent', {'slug': event.slug}) }}>Détails →</a>
-                        <form action="{{ path('inscriptionsEvent', {'slug': event.slug}) }}"
-                              method="post">
-                            <button type="submit">S'inscrire</button>
-                        </form>
+            <div class="col-md-6 col-lg-4">
+                <div class="card-event">
+                    <div>
+                        <div class="d-flex align-items-start justify-content-between mb-3">
+                            <div class="date-badge">
+                                <span class="day">{{ event.startAt|date('d') }}</span>
+                                <span class="month">{{ event.startAt|date('M') }}</span>
+                            </div>
+                            <span class="badge rounded-pill text-bg-light border px-3 py-2 fw-normal text-muted">
+                            <i class="fa-regular fa-clock me-1"></i> {{ event.startAt|date('H:i') }}
+                        </span>
+                        </div>
 
+                        <h3 class="h5 fw-bold text-dark mb-2">{{ event.title }}</h3>
+                    </div>
 
-                        {% if is_granted('ROLE_ADMIN') or app.user == event.organizer  %}
-                        <a href={{ path('editevent', {'slug': event.slug}) }}>Modifier l'évenement →</a>
+                    <div class="pt-3 border-top mt-3">
+                        <div class="d-flex align-items-center gap-2 mb-2">
+                            <a href="{{ path('detailsEvent', {'slug': event.slug}) }}" class="btn-eh-outline w-50">Détails →</a>
+
+                            <form action="{{ path('inscriptionsEvent', {'slug': event.slug}) }}" method="post" class="w-50 m-0">
+                                <button type="submit" class="btn-eh w-100">S'inscrire</button>
+                            </form>
+                        </div>
+
+                        {% if is_granted('ROLE_ADMIN') or app.user == event.organizer %}
+                            <div class="text-center mt-2">
+                                <a href="{{ path('editevent', {'slug': event.slug}) }}" class="small text-muted text-decoration-none">
+                                    <i class="fa-solid fa-pen-to-square me-1"></i> Modifier l'événement
+                                </a>
+                            </div>
                         {% endif %}
-
-
-
                     </div>
                 </div>
             </div>
         {% else %}
-            <p>Aucun événement publié.</p>
+            <div class="col-12 text-center py-5 bg-white rounded-4 border shadow-sm">
+                <i class="fa-regular fa-calendar-xmark display-4 text-muted mb-3 d-block"></i>
+                <p class="text-muted mb-0">Aucun événement publié pour le moment.</p>
+            </div>
         {% endfor %}
     </div>
-
 {% endblock %}
-
-

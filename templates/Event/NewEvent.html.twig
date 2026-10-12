@@ -1,43 +1,50 @@
 {% extends 'base.html.twig' %}
-{% form_theme form 'bootstrap_4_layout.html.twig' %}
+{% form_theme form 'bootstrap_5_layout.html.twig' %}
 
-{% block title %}{{ parent() }} | Créer un événement{% endblock %}
+{% block title %}Créer un événement | EventHub Enigma{% endblock %}
 
 {% block body %}
-    {% for type, messages in app.flashes %}
-        {% for message in messages %}
-            <div class="alert alert-{{ type }} mt-3">{{ message }}</div>
-        {% endfor %}
-    {% endfor %}
-
-    <div class="page-head">
-        <a href="/eventAll">Tous les événements</a>
-        <h1 class="mt-2">Créer un événement</h1>
-    </div>
-
-    <div class="detail-card form-card mt-4">
-        {{ form_start(form) }}
-        {{ form_row(form.title) }}
-
-        <div class="row">
-{#            <div class="col-md-6">{{ form_row(form.organizer) }}</div>#}
-            <div class="col-md-6">{{ form_row(form.category) }}</div>
+    <div class="max-width-800 mx-auto">
+        <div class="d-flex align-items-center justify-content-between mb-4">
+            <div>
+                <a href="/eventAll" class="text-decoration-none text-muted small"><i class="fa-solid fa-arrow-left me-1"></i> Retour aux événements</a>
+                <h1 class="fw-bold mt-1">Nouveau projet d'événement</h1>
+            </div>
         </div>
 
-        {{ form_row(form.description) }}
+        <div class="form-card">
+            {{ form_start(form) }}
 
-        <div class="row">
-            <div class="col-md-6">{{ form_row(form.startAt) }}</div>
-            <div class="col-md-6">{{ form_row(form.endAt) }}</div>
+            <div class="mb-3">
+                {{ form_row(form.title, {'label_attr': {'class': 'fw-semibold'}}) }}
+            </div>
+
+            <div class="row g-3 mb-3">
+                <div class="col-md-6">{{ form_row(form.category) }}</div>
+                <div class="col-md-6">{{ form_row(form.capacity) }}</div>
+            </div>
+
+            <div class="mb-3">
+                {{ form_row(form.description) }}
+            </div>
+
+            <div class="row g-3 mb-3">
+                <div class="col-md-6">{{ form_row(form.startAt) }}</div>
+                <div class="col-md-6">{{ form_row(form.endAt) }}</div>
+            </div>
+
+            <div class="row g-3 mb-4">
+                <div class="col-md-6">{{ form_row(form.status) }}</div>
+                <div class="col-md-6">{{ form_row(form.coverImage) }}</div>
+            </div>
+
+            <div class="pt-3 border-top text-end">
+                <button type="submit" class="btn-eh px-4 py-2">
+                    <i class="fa-solid fa-check me-1"></i> Publier l'événement
+                </button>
+            </div>
+
+            {{ form_end(form) }}
         </div>
-
-        <div class="row">
-            <div class="col-md-4">{{ form_row(form.capacity) }}</div>
-            <div class="col-md-4">{{ form_row(form.status) }}</div>
-            <div class="col-md-4">{{ form_row(form.coverImage) }}</div>
-        </div>
-
-        <button type="submit" class="btn-eh dark mt-3">Enregistrer</button>
-        {{ form_end(form) }}
     </div>
 {% endblock %}

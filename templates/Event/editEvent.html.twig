@@ -1,43 +1,54 @@
 {% extends 'base.html.twig' %}
-{% form_theme form 'bootstrap_4_layout.html.twig' %}
+{% form_theme form 'bootstrap_5_layout.html.twig' %}
 
-{% block title %}{{ parent() }} | Edit l'événement {{ event.title }} {% endblock %}
+{% block title %}{{ parent() }} | Modifier {{ event.title }}{% endblock %}
 
 {% block body %}
-    {% for type, messages in app.flashes %}
-        {% for message in messages %}
-            <div class="alert alert-{{ type }} mt-3">{{ message }}</div>
-        {% endfor %}
-    {% endfor %}
+    <div class="row justify-content-center">
+        <div class="col-lg-8">
+            <div class="mb-3">
+                <a href="/eventAll" class="text-decoration-none text-muted small">
+                    <i class="fa-solid fa-arrow-left me-1"></i> Tous les événements
+                </a>
+                <h1 class="fw-bold mt-1">Modifier l'événement</h1>
+                <p class="text-muted small">Mettez à jour les informations de "{{ event.title }}"</p>
+            </div>
 
-    <div class="page-head">
-        <a href="/eventAll">Tous les événements</a>
-        <h1 class="mt-2"> Edit l'événement {{ event.title }} </h1>
-    </div>
+            <div class="form-card">
+                {{ form_start(form) }}
 
-    <div class="detail-card form-card mt-4">
-        {{ form_start(form) }}
-        {{ form_row(form.title) }}
+                <div class="mb-3">
+                    {{ form_row(form.title) }}
+                </div>
 
-        <div class="row">
-            {#            <div class="col-md-6">{{ form_row(form.organizer) }}</div>#}
-            <div class="col-md-6">{{ form_row(form.category) }}</div>
+                <div class="row g-3 mb-3">
+                    <div class="col-md-6">{{ form_row(form.category) }}</div>
+                    <div class="col-md-6">{{ form_row(form.capacity) }}</div>
+                </div>
+
+                <div class="mb-3">
+                    {{ form_row(form.description) }}
+                </div>
+
+                <div class="row g-3 mb-3">
+                    <div class="col-md-6">{{ form_row(form.startAt) }}</div>
+                    <div class="col-md-6">{{ form_row(form.endAt) }}</div>
+                </div>
+
+                <div class="row g-3 mb-4">
+                    <div class="col-md-6">{{ form_row(form.status) }}</div>
+                    <div class="col-md-6">{{ form_row(form.coverImage) }}</div>
+                </div>
+
+                <div class="d-flex justify-content-end gap-2 pt-3 border-top">
+                    <a href="{{ path('detailsEvent', {'slug': event.slug}) }}" class="btn-eh-outline">Annuler</a>
+                    <button type="submit" class="btn-eh">
+                        <i class="fa-solid fa-floppy-disk me-1"></i> Enregistrer les modifications
+                    </button>
+                </div>
+
+                {{ form_end(form) }}
+            </div>
         </div>
-
-        {{ form_row(form.description) }}
-
-        <div class="row">
-            <div class="col-md-6">{{ form_row(form.startAt) }}</div>
-            <div class="col-md-6">{{ form_row(form.endAt) }}</div>
-        </div>
-
-        <div class="row">
-            <div class="col-md-4">{{ form_row(form.capacity) }}</div>
-            <div class="col-md-4">{{ form_row(form.status) }}</div>
-            <div class="col-md-4">{{ form_row(form.coverImage) }}</div>
-        </div>
-
-        <button type="submit" class="btn-eh dark mt-3">Enregistrer les modifications </button>
-        {{ form_end(form) }}
     </div>
 {% endblock %}
