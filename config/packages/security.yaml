@@ -8,6 +8,18 @@ security:
             entity:
                 class: App\Entity\User
                 property: email
+
+    role_hierarchy:
+        ROLE_ADMIN:
+            - ROLE_ORGANIZER
+            - ROLE_USER
+        ROLE_ORGANIZER:
+            - ROLE_USER
+
+
+
+
+
     firewalls:
         dev:
             pattern: ^/(_(profiler|wdt)|css|images|js)/
@@ -21,7 +33,7 @@ security:
                 check_path: app_login
                 username_parameter: email
                 password_parameter: password
-                enable_csrf: true
+                enable_csrf: false
 
             logout:
                 path: logout
@@ -36,8 +48,11 @@ security:
     # Easy way to control access for large sections of your site
     # Note: Only the *first* access control that matches will be used
     access_control:
-    # - { path: ^/admin, roles: ROLE_ADMIN }
-    # - { path: ^/profile, roles: ROLE_USER }
+    - { path: ^/NewEvent, roles: ROLE_ORGANIZER }
+    - { path: ^/editevent, roles: ROLE_ORGANIZER }
+    - { path: ^/admin, roles: ROLE_ADMIN }
+    - { path: ^/profile, roles: ROLE_USER }
+    - { path: ^/yourevent, roles: ROLE_ORGANIZER }
 
 when@test:
     security:

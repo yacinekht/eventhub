@@ -1,0 +1,35 @@
+{% extends 'base.html.twig' %}
+
+{% block title %} {{ parent() }} | EVENTpage {% endblock %}
+
+{% block body %}
+
+    <div class="p-5 mb-4 bg-white rounded-3 shadow-sm">
+        <h2>Prochains événements</h2>
+    </div>
+    <div class="row">
+        {% for events in event %}
+            <div class="col-md-4 mb-3">
+                <div class="card h-100">
+                    <div class="card-body"><h3 class="h5">{{ events.title }}</h3>
+                        <p>{{ events.startAt|date('d/m/Y H:i') }}</p>
+                        <a href={{ path('detailsEvent', {'slug': events.slug}) }}>Détails →</a>
+
+                        {% if is_granted('ROLE_ADMIN') or app.user == events.organizer  %}
+                            <a href={{ path('editevent', {'slug': events.slug}) }}>Modifier l'évenement →</a>
+                        {% endif %}
+
+                    </div>
+
+
+                </div>
+            </div>
+        {% else %}
+            <p>Aucun événement publié.</p>
+        {% endfor %}
+        <div class="p-5 mb-4 bg-white rounded-3 shadow-sm">
+            <a class="btn btn-primary" href='/'>Voir les événements en ligne </a>
+        </div>
+    </div>
+
+{% endblock %}

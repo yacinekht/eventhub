@@ -7,7 +7,7 @@ enum RegistrationStatus: string
 
     case Cancelled ='cancelled';
 
-    case Conformed ='Confirmer';
+    case Confirmed ='Confirmer';
 
     case Waitlist='Waitlist';
 

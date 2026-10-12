@@ -1,0 +1,59 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}
+    {{ parent() }} | Détail de l'événement
+{% endblock %}
+
+{% block body %}
+
+    <div class="container mt-4">
+
+        <div class="p-5 mb-4 bg-white rounded-3 shadow-sm">
+
+            <h2>{{ event.title }}</h2>
+
+            <p>
+                <strong>Description :</strong>
+                {{ event.description }}
+            </p>
+
+            <p>
+                <strong>Capacité :</strong>
+                {{ event.capacity }}
+            </p>
+
+            <p>
+            <strong>Organisateur :</strong>
+                {{ event.organizer.username }}
+            </p>
+
+            <p>
+                <strong>Date de début :</strong>
+                {{ event.startAt|date('d/m/Y H:i') }}
+            </p>
+
+            <p>
+                <strong>Date de fin :</strong>
+                {{ event.endAt|date('d/m/Y H:i') }}
+            </p>
+
+            <p>
+                <strong>Statut :</strong>
+                {{ event.status.value }}
+            </p>
+
+            <div class="p-5 mb-4 bg-white rounded-3 shadow-sm">
+                    <a class="btn btn-primary" href='/eventAll'>Voir les événements</a>
+                {% if is_granted('ROLE_ADMIN') or app.user == event.organizer %}
+                    <a href={{ path('editevent', {'slug': event.slug}) }}>Modifier l'évenement →</a>
+                {% endif %}
+
+            </div>
+
+        </div>
+
+    </div>
+
+
+
+{% endblock %}

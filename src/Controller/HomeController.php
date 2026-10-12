@@ -4,6 +4,7 @@ namespace App\Controller;
 
 
 
+use App\Repository\EventRepository;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Attribute\AsController;
 use Symfony\Component\Routing\Attribute\Route;
@@ -14,11 +15,13 @@ use Twig\Environment;
 class HomeController
 {
 
-    public function __invoke(Environment $twig): Response
+    public function __invoke(Environment $twig, EventRepository $eventRepository): Response
 
     {
 
-        return new Response($twig->render("Home/home.html.twig", [] ) , Response::HTTP_OK );
+        return new Response($twig->render("Home/home.html.twig", [
+            'events'=>$eventRepository->findEventsPublished()
+        ] ) , Response::HTTP_OK );
     }
 
 

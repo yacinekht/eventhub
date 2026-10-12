@@ -1,0 +1,43 @@
+{% extends 'base.html.twig' %}
+{% form_theme form 'bootstrap_4_layout.html.twig' %}
+
+{% block title %}{{ parent() }} | Edit l'événement {{ event.title }} {% endblock %}
+
+{% block body %}
+    {% for type, messages in app.flashes %}
+        {% for message in messages %}
+            <div class="alert alert-{{ type }} mt-3">{{ message }}</div>
+        {% endfor %}
+    {% endfor %}
+
+    <div class="page-head">
+        <a href="/eventAll">Tous les événements</a>
+        <h1 class="mt-2"> Edit l'événement {{ event.title }} </h1>
+    </div>
+
+    <div class="detail-card form-card mt-4">
+        {{ form_start(form) }}
+        {{ form_row(form.title) }}
+
+        <div class="row">
+            {#            <div class="col-md-6">{{ form_row(form.organizer) }}</div>#}
+            <div class="col-md-6">{{ form_row(form.category) }}</div>
+        </div>
+
+        {{ form_row(form.description) }}
+
+        <div class="row">
+            <div class="col-md-6">{{ form_row(form.startAt) }}</div>
+            <div class="col-md-6">{{ form_row(form.endAt) }}</div>
+        </div>
+
+        <div class="row">
+            <div class="col-md-4">{{ form_row(form.capacity) }}</div>
+            <div class="col-md-4">{{ form_row(form.status) }}</div>
+            <div class="col-md-4">{{ form_row(form.coverImage) }}</div>
+        </div>
+
+        <button type="submit" class="btn-eh dark mt-3">Enregistrer les modifications </button>
+        {{ form_end(form) }}
+    </div>
+{% endblock %}

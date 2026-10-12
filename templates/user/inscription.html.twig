@@ -1,0 +1,54 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Mes inscriptions{% endblock %}
+
+{% block body %}
+    <h1>Mes inscriptions</h1>
+
+    {% if registrations is empty %}
+        <p>Tu n'es inscrit à aucun événement pour le moment.</p>
+    {% else %}
+        <table>
+            <thead>
+            <tr>
+                <th>Événement</th>
+                <th>Catégorie</th>
+                <th>Date</th>
+                <th>Statut</th>
+                <th>Inscrit le</th>
+            </tr>
+            </thead>
+            <tbody>
+            {% for registration in registrations %}
+                <tr>
+                    <td>{{ registration.event.title }}</td>
+                    <td>{{ registration.event.category.name }}</td>
+                    <td>{{ registration.event.startAt|date('d/m/Y H:i') }}</td>
+                    <td>
+                        {% if registration.status.name == 'Confirmed' %}
+                            ✅ Confirmée
+                        {% elseif registration.status.name == 'Waitlist' %}
+                            ⏳ Liste d'attente
+                        {% else %}
+                            ❌ Annulée
+                        {% endif %}
+                    </td>
+                    <td>{{ registration.createdAt|date('d/m/Y') }}</td>
+                    <td>
+                        <form
+                            action="{{ path('uninscriptionEvent', {
+                                slug: registration.event.slug
+                            }) }}"
+                            method="post"
+                        >
+                            <button type="submit" class="btn btn-danger">
+                                Se désinscrire
+                            </button>
+                        </form>
+                    </td>
+                </tr>
+            {% endfor %}
+            </tbody>
+        </table>
+    {% endif %}
+{% endblock %}
